@@ -3,5 +3,5 @@ class Student < ApplicationRecord
   validates :name, presence: true
 
   has_many :courses
-  has_many :class_details, through: :courses
+  has_many :class_details
 end

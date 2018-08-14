@@ -5,7 +5,14 @@ module SessionsHelper
     form = page.forms.first
     form["LoginName"] = params[:session][:student_id]
     form["Password"] = params[:session][:password]
-    form.submit
+    result = form.submit
+
+    stringio = StringIO.new
+    agent.cookie_jar.save(stringio, session: true)
+    cookies = stringio.string
+    session[:login_cookies] = cookies
+
+    result
   end
 
   def get_student_name page
