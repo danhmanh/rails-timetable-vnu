@@ -20,7 +20,7 @@
         <ul class="nav navbar-nav navbar-right">
           <% if logged_in? %>
               <p class="navbar-text">
-                Xin chào, <%= current_user.name %> - <%= current_user.student_id %>
+                Xin chào, <%= current_user.name %> - <%= current_user.id %>
               </p>
             <%= link_to "Đăng xuất", logout_path, class: "btn btn-danger navbar-btn",
               method: :delete %>

@@ -16,9 +16,9 @@ module SessionsHelper
   def log_in page
     student_id = params[:session][:student_id]
     name = get_student_name page
-    user = User.find_by_student_id student_id
-    user = User.create student_id: student_id, name: name if user.nil?
-    session[:student_id] = user.student_id
+    student = Student.find_by_id student_id
+    student = Student.create id: student_id, name: name if student.nil?
+    session[:student_id] = student.id
   end
 
   def log_out
@@ -30,6 +30,6 @@ module SessionsHelper
   end
 
   def current_user
-    User.find_by_student_id session[:student_id]
+    Student.find_by_id session[:student_id]
   end
 end
