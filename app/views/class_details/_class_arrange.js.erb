@@ -1,0 +1,30 @@
+$(document).on('turbolinks:load', function() {
+  alert("Loading Complete!");
+
+  <% @class_details.each do |klass| %>
+    class_cell = $("#T<%= klass.day_of_week %>-t<%= klass.class_time %>");
+    class_cell.html(
+      "<h5><%= j klass.course.name %></h5> \
+        <p><%= j klass.place %></p> "
+    );
+
+    class_cell.attr("colspan", "<%= klass.duration %>");
+
+  <% end %>
+
+  for (let day = 2; day <= 7; day++) {
+    for(let time = 1; time <= 10; time++) {
+      merge_cell(day, time);
+    }
+  }
+
+  function merge_cell(day, time) {
+    element = $("#T" + day + "-t"+ time);
+    colspan = element.attr("colspan");
+    for (let index = 1; index < colspan; index++) {
+      element = element.next();
+      element.hide();
+    }
+  }
+
+});
