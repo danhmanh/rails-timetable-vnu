@@ -9,6 +9,8 @@ module ClassDetailsHelper
     crawl_class_details result
   end
 
+  private
+
   def crawl_courses page
     rows = page.search("table")[2].search("tr")
     1.upto(rows.size - 2) do |index|
@@ -53,21 +55,28 @@ module ClassDetailsHelper
     end
   end
 
-  def get_time row
+  def split_time row
     time = row.search("td")[8].text.strip
     time.gsub!(/\s+/, "")
+    split = time.split ","
+  end
 
-    [time[0].to_i] if time.count("-").eql? 1
-    [time[0].to_i, time[4].to_i]
+  def class_in_one_day? row
+    time = row.search("td")[8].text.strip
+    time.count("-").eql? 1
+  end
+
+  def get_time row
+    split = split_time row
+    return [split[0][0].to_i] if class_in_one_day? row
+    [split[0][0].to_i, split[1][0].to_i]
   end
 
   def get_duration row
-    time = row.search("td")[8].text.strip
-    time.gsub!(/\s+/, "")
-
-    duration1 = (time[0].to_i - time[2].to_i).abs + 1
-    return [duration1] if time.count("-").eql? 1
-    duration2 = (time[4].to_i - time[6..time.size].to_i).abs + 1
+    split = split_time row
+    duration1 = (split[0][0].to_i - split[0][2..split[0].size].to_i).abs + 1
+    return [duration1] if class_in_one_day? row
+    duration2 = (split[1][0].to_i - split[1][2..split[1].size].to_i).abs + 1
     [duration1, duration2]
   end
 
